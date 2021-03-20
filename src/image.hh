@@ -61,3 +61,6 @@ private:
   int               n_channels;
   std::vector<Line> img;
 };
+
+float
+pixel_distance(const Pixel& p1, const Pixel& p2);

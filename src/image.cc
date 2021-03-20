@@ -8,6 +8,8 @@
 #include <sstream>
 #include <string>
 
+#include <cmath>
+
 Image::Image(std::filesystem::path img_path)
 {
   uint8_t* rgb_image = stbi_load(
@@ -55,3 +57,11 @@ Pixel::to_hex(void) const
 
   return ss.str();
 };
+
+float
+pixel_distance(const Pixel& p1, const Pixel& p2)
+{
+  return std::sqrt(((p1.r - p2.r) * (p1.r - p2.r)) +
+                   ((p1.g - p2.g) * (p1.g - p2.g)) +
+                   ((p1.b - p2.b) * (p1.b - p2.b)));
+}
