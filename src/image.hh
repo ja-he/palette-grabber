@@ -21,18 +21,9 @@ struct Iterator
   using reference  = const Pixel&;
   using pointer    = const Pixel*;
 
-  reference operator*() { return *pixel_iter; }
-
-  Iterator& operator++()
-  {
-    if (++pixel_iter == line_iter->end()) { line_iter++; pixel_iter = line_iter->begin(); }
-    return *this;
-  }
-
-  bool operator==(const Iterator& that) const
-  {
-    return line_iter == that.line_iter && pixel_iter == that.pixel_iter;
-  }
+  reference operator*();
+  Iterator& operator++();
+  bool      operator==(const Iterator& that) const;
 
   std::vector<Pixel>::iterator pixel_iter;
   std::vector<Line>::iterator  line_iter;
@@ -49,11 +40,8 @@ public:
   int get_height(void) const;
   int get_n_channels(void) const;
 
-  Iterator begin()
-  {
-    return Iterator{ this->img.begin()->begin(), this->img.begin() };
-  }
-  Iterator end() { return Iterator{ this->img.end()->begin(), this->img.end() }; }
+  Iterator begin();
+  Iterator end();
 
 private:
   int               width;

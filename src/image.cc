@@ -41,9 +41,21 @@ Image::at(size_t line, size_t pixel) const
   return this->img[line][pixel];
 }
 
-int Image::get_width(void) const { return this->width; }
-int Image::get_height(void) const { return this->height; }
-int Image::get_n_channels(void) const { return this->n_channels; }
+int
+Image::get_width(void) const
+{
+  return this->width;
+}
+int
+Image::get_height(void) const
+{
+  return this->height;
+}
+int
+Image::get_n_channels(void) const
+{
+  return this->n_channels;
+}
 
 std::string
 Pixel::to_hex(void) const
@@ -64,4 +76,38 @@ pixel_distance(const Pixel& p1, const Pixel& p2)
   return std::sqrt(((p1.r - p2.r) * (p1.r - p2.r)) +
                    ((p1.g - p2.g) * (p1.g - p2.g)) +
                    ((p1.b - p2.b) * (p1.b - p2.b)));
+}
+
+Iterator
+Image::begin()
+{
+  return Iterator{ this->img.begin()->begin(), this->img.begin() };
+}
+
+Iterator
+Image::end()
+{
+  return Iterator{ this->img.end()->begin(), this->img.end() };
+}
+
+Iterator::reference
+Iterator::operator*()
+{
+  return *pixel_iter;
+}
+
+Iterator&
+Iterator::operator++()
+{
+  if (++pixel_iter == line_iter->end()) {
+    line_iter++;
+    pixel_iter = line_iter->begin();
+  }
+  return *this;
+}
+
+bool
+Iterator::operator==(const Iterator& that) const
+{
+  return line_iter == that.line_iter && pixel_iter == that.pixel_iter;
 }
