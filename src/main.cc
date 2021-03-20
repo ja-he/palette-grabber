@@ -12,13 +12,14 @@ main(int argc, char* argv[])
 {
   assert(argc > 1);
 
-  Image img(argv[1]);
+  Image img((argc > 2) ? argv[2] : argv[1]);
   printf("read in a %d by %d image with %d channels.\n",
          img.get_width(),
          img.get_height(),
          img.get_n_channels());
 
-  float              distance_tolerance = 100.0f;
+  float distance_tolerance = (argc <= 2) ? 100.0f : std::stof(argv[1]);
+  assert(distance_tolerance >= 10);
   std::vector<Pixel> distinct_colors;
   for (const auto& pixel : img) {
     bool new_color =
