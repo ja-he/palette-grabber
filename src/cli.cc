@@ -47,20 +47,76 @@ parse_args(int argc, char* argv[])
 struct OptionSpec
 {
 public:
-  std::map<std::string, std::string> short_to_long{ { "i", "input" },
+  void print(void) const
+  {
+    std::cerr << program_name << ": " << '\n';
+    std::cerr << "  " << program_description << '\n';
+    std::cerr << '\n';
+
+    std::cerr << "Usage: " << '\n';
+    std::cerr << "$ " << program_name << ' ';
+    for (const auto& option : required) {
+      std::cerr << "--" << option
+                << (option_arguments.at(option).length()
+                      ? " " + option_arguments.at(option)
+                      : "")
+                << ' ';
+    }
+    std::cerr << "[optional options]";
+    std::cerr << '\n';
+    std::cerr << '\n';
+
+    std::cerr << "Options:" << '\n';
+    size_t maxlen = 0;
+    for (const auto& [option, arg] : option_arguments) {
+      maxlen = std::max(
+        maxlen, option.length() + (arg.length() ? (1 + arg.length()) : 0));
+    }
+    maxlen += 5; // 5 because of the "-x,--" prefix
+
+    for (const auto& [option, arg] : option_arguments) {
+      std::cerr << std::setw(maxlen) << std::left
+                << (("-" + long_to_short.at(option)) + ',' +
+                    ("--" + option + (arg.length() ? " " + arg : "")))
+                << " : ";
+      int               column = maxlen + 3;
+      std::stringstream ss(description.at(option));
+      std::string       word;
+      while (std::getline(ss, word, ' ')) {
+        if (column + word.length() > 100) {
+          std::cerr << '\n';
+          std::cerr << std::string(maxlen + 3, ' ');
+          column = maxlen + 3;
+        }
+        std::cerr << word << ' ';
+        column += word.length();
+      }
+      std::cerr << '\n';
+    }
+  };
+
+  std::string program_name = "palette-grabber";
+  std::string program_description =
+    "Generate a color palette from an image file.";
+
+  std::map<std::string, std::string> short_to_long{ { "h", "help" },
+                                                    { "i", "input" },
                                                     { "d", "dump-colors" },
                                                     { "n", "naive" } };
-  std::map<std::string, std::string> long_to_short{ { "input", "i" },
+  std::map<std::string, std::string> long_to_short{ { "help", "h" },
+                                                    { "input", "i" },
                                                     { "dump-colors", "d" },
                                                     { "naive", "n" } };
 
   std::map<std::string, std::vector<std::string>> incompatible_counterparts{
+    { "help", {} },
     { "input", {} },
     { "dump-colors", { "naive" } },
     { "naive", { "dump-colors" } },
   };
 
   std::map<std::string, std::string> description{
+    { "help", "Print this help information." },
     { "input", "The input file. Must be given a valid input file name." },
     { "dump-colors", "Dump all colors from the image." },
     { "naive",
@@ -69,7 +125,8 @@ public:
       "if none provided." }
   };
 
-  std::map<std::string, std::string> option_arguments{ { "input", "<file>" },
+  std::map<std::string, std::string> option_arguments{ { "help", "" },
+                                                       { "input", "<file>" },
                                                        { "dump-colors", "" },
                                                        { "naive",
                                                          "[<threshold>]" } };
@@ -118,6 +175,10 @@ Options::Options(std::map<std::string, std::string> m)
   }
 
   // parse all options
+  if (m.contains("help")) {
+    spec.print();
+    exit(EXIT_SUCCESS);
+  }
   if (m.contains("naive")) {
     this->naive = true;
     if (m["naive"] == "") {
