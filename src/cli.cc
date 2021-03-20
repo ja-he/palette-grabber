@@ -16,6 +16,12 @@ parse_args(int argc, char* argv[])
   for (int arg_index = 1; arg_index < argc; arg_index++) {
     std::string arg{ argv[arg_index] };
 
+    // TODO(ja-he): due to how we do this, an argument like `--i asdf` will get
+    //              parsed the same `-i asdf` would. Do we consider this a
+    //              problem? I don't see name clash potential because we'll
+    //              never want single letter long names but I guess it's a bit
+    //              dirty to also parse `--...` as a short option.
+
     std::smatch match;
     if (std::regex_search(arg, match, std::regex("^--([a-z\\-]+)$"))) {
       last_key    = match[1];
