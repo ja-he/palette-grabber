@@ -3,13 +3,15 @@
 #include <filesystem>
 #include <iostream>
 
+#include <string>
 #include <vector>
 
 struct Pixel
 {
-  uint8_t r = 0;
-  uint8_t g = 0;
-  uint8_t b = 0;
+  uint8_t     r = 0;
+  uint8_t     g = 0;
+  uint8_t     b = 0;
+  std::string to_hex(void) const;
 };
 typedef std::vector<Pixel> Line;
 

@@ -4,6 +4,10 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include <iomanip>
+#include <sstream>
+#include <string>
+
 Image::Image(std::filesystem::path img_path)
 {
   uint8_t* rgb_image = stbi_load(
@@ -39,3 +43,15 @@ int Image::get_width(void) const { return this->width; }
 int Image::get_height(void) const { return this->height; }
 int Image::get_n_channels(void) const { return this->n_channels; }
 
+std::string
+Pixel::to_hex(void) const
+{
+  std::stringstream ss;
+  ss << '#';
+  ss << std::hex;
+  ss << std::setw(2) << std::setfill('0') << (uint32_t)(this->r);
+  ss << std::setw(2) << std::setfill('0') << (uint32_t)(this->g);
+  ss << std::setw(2) << std::setfill('0') << (uint32_t)(this->b);
+
+  return ss.str();
+};
