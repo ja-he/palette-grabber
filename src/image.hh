@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 struct Pixel
 {
@@ -14,6 +15,9 @@ struct Pixel
   std::string to_hex(void) const;
   uint32_t to_uint(void) const;
 };
+
+bool operator<(const Pixel& a, const Pixel& b);
+
 typedef std::vector<Pixel> Line;
 
 struct Iterator
@@ -40,6 +44,8 @@ public:
   int get_width(void) const;
   int get_height(void) const;
   int get_n_channels(void) const;
+
+  std::set<Pixel> get_colors(void) const;
 
   Iterator begin();
   Iterator end();

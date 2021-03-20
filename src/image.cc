@@ -117,3 +117,23 @@ Iterator::operator==(const Iterator& that) const
 {
   return line_iter == that.line_iter && pixel_iter == that.pixel_iter;
 }
+
+std::set<Pixel>
+Image::get_colors(void) const
+{
+  std::set<Pixel> colors;
+  for (auto& line : img) {
+    for (auto& color : line) {
+      colors.insert(color);
+    }
+  }
+  return colors;
+}
+
+bool
+operator<(const Pixel& a, const Pixel& b)
+{
+  uint32_t an = (a.r << 16) | (a.g << 8) | (a.b);
+  uint32_t bn = (b.r << 16) | (b.g << 8) | (b.b);
+  return an < bn;
+}
