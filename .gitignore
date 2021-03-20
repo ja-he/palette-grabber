@@ -16,3 +16,7 @@ doc
 .clangd
 compile_commands.json
 .cache
+
+# common names for clutter files
+output
+out
