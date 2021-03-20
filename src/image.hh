@@ -12,6 +12,7 @@ struct Pixel
   uint8_t     g = 0;
   uint8_t     b = 0;
   std::string to_hex(void) const;
+  uint32_t to_uint(void) const;
 };
 typedef std::vector<Pixel> Line;
 

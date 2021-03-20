@@ -57,6 +57,12 @@ Image::get_n_channels(void) const
   return this->n_channels;
 }
 
+uint32_t
+Pixel::to_uint(void) const
+{
+  return ((r << 16) | (g << 8) | b);
+}
+
 std::string
 Pixel::to_hex(void) const
 {
@@ -68,7 +74,7 @@ Pixel::to_hex(void) const
   ss << std::setw(2) << std::setfill('0') << (uint32_t)(this->b);
 
   return ss.str();
-};
+}
 
 float
 pixel_distance(const Pixel& p1, const Pixel& p2)
