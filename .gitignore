@@ -1,0 +1,18 @@
+# binaries 
+.build
+palette-grabber
+test
+
+# memory profiling output
+massif*
+
+# segfault coredumps
+core
+
+# doc dir
+doc
+
+# coc-clangd specific files
+.clangd
+compile_commands.json
+.cache
