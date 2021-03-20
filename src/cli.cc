@@ -41,9 +41,6 @@ parse_args(int argc, char* argv[])
       last_key    = "";
     }
   }
-  for (const auto& [k, v] : m) {
-    std::cerr << std::setw(10) << k << " : " << v << '\n';
-  }
   return m;
 }
 
