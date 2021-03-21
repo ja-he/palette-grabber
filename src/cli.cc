@@ -83,7 +83,7 @@ public:
       std::stringstream ss(description.at(option));
       std::string       word;
       while (std::getline(ss, word, ' ')) {
-        if (column + word.length() > 100) {
+        if (column + word.length() > 80) {
           std::cerr << '\n';
           std::cerr << std::string(maxlen + 3, ' ');
           column = maxlen + 3;

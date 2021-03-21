@@ -27,6 +27,7 @@ Options:
 -d,--dump-colors         : Dump all colors from the image.
 -h,--help                : Print this help information.
 -i,--input <file>        : The input file. Must be given a valid input file name.
--n,--naive [<threshold>] : Naively get unique (by euclidean distance) color values from image to form palette.
-                           Can be given a distance threshold value, default is 100.0 if none provided.
+-n,--naive [<threshold>] : Naively get unique (by euclidean distance) color values from
+                           image to form palette. Can be given a distance threshold value,
+                           default is 100.0 if none provided.
 ```
