@@ -89,13 +89,15 @@ pixel_distance(const Pixel& p1, const Pixel& p2)
 Iterator
 Image::begin()
 {
-  return Iterator{ this->img.begin()->begin(), this->img.begin() };
+  return Iterator{ this->img.begin()->begin(),
+                   this->img.begin(),
+                   this->img.end() };
 }
 
 Iterator
 Image::end()
 {
-  return Iterator{ this->img.end()->begin(), this->img.end() };
+  return Iterator{ this->img.end(), this->img.end() };
 }
 
 Iterator::reference
@@ -107,9 +109,12 @@ Iterator::operator*()
 Iterator&
 Iterator::operator++()
 {
+  assert(this->line_iter_usable);
   if (++pixel_iter == line_iter->end()) {
     line_iter++;
-    pixel_iter = line_iter->begin();
+    if (line_iter != line_end) {
+      pixel_iter = line_iter->begin();
+    }
   }
   return *this;
 }
@@ -117,6 +122,10 @@ Iterator::operator++()
 bool
 Iterator::operator==(const Iterator& that) const
 {
+  if (this->line_iter == this->line_end) {
+    assert(that.line_iter == that.line_end);
+    return true;
+  }
   return line_iter == that.line_iter && pixel_iter == that.pixel_iter;
 }
 

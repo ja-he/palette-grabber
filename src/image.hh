@@ -3,9 +3,9 @@
 #include <filesystem>
 #include <iostream>
 
+#include <set>
 #include <string>
 #include <vector>
-#include <set>
 
 struct Pixel
 {
@@ -13,10 +13,11 @@ struct Pixel
   uint8_t     g = 0;
   uint8_t     b = 0;
   std::string to_hex(void) const;
-  uint32_t to_uint(void) const;
+  uint32_t    to_uint(void) const;
 };
 
-bool operator<(const Pixel& a, const Pixel& b);
+bool
+operator<(const Pixel& a, const Pixel& b);
 
 typedef std::vector<Pixel> Line;
 
@@ -30,8 +31,23 @@ struct Iterator
   Iterator& operator++();
   bool      operator==(const Iterator& that) const;
 
-  std::vector<Pixel>::iterator pixel_iter;
-  std::vector<Line>::iterator  line_iter;
+  Iterator(std::vector<Pixel>::iterator pixel_iter,
+           std::vector<Line>::iterator  line_iter,
+           std::vector<Line>::iterator  line_end)
+    : line_iter_usable(true)
+    , pixel_iter(pixel_iter)
+    , line_iter(line_iter)
+    , line_end(line_end){};
+  Iterator(std::vector<Line>::iterator line_iter,
+           std::vector<Line>::iterator line_end)
+    : line_iter(line_iter)
+    , line_end(line_end){};
+
+private:
+  bool                              line_iter_usable = false;
+  std::vector<Pixel>::iterator      pixel_iter;
+  std::vector<Line>::iterator       line_iter;
+  const std::vector<Line>::iterator line_end;
 };
 
 class Image
