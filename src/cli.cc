@@ -149,6 +149,12 @@ Options::Options(std::map<std::string, std::string> m)
     }
   }
 
+  // check if --help was given
+  if (m.contains("help")) {
+    spec.print();
+    exit(EXIT_SUCCESS);
+  }
+
   // TODO(ja-he): verify existence of required options
   for (const auto& required : spec.required) {
     if (!m.contains(required)) {
@@ -175,10 +181,6 @@ Options::Options(std::map<std::string, std::string> m)
   }
 
   // parse all options
-  if (m.contains("help")) {
-    spec.print();
-    exit(EXIT_SUCCESS);
-  }
   if (m.contains("naive")) {
     this->naive = true;
     if (m["naive"] == "") {
