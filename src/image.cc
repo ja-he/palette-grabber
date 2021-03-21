@@ -12,6 +12,8 @@
 
 Image::Image(std::filesystem::path img_path)
 {
+  // TODO(ja-he): verify file existence, permissions, ... neatly
+
   uint8_t* rgb_image = stbi_load(
     img_path.c_str(), &this->width, &this->height, &this->n_channels, 3);
   if (n_channels != 3) {
