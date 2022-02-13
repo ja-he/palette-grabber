@@ -1,7 +1,7 @@
 PROGNAME := palette-grabber
 
 STD := -std=c++20
-OPT := -O0 -g
+OPT := -O3
 WRN := -Wall -Wextra -Wpedantic
 LDFLAGS :=
 
