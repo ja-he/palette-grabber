@@ -27,7 +27,7 @@ run_k_means(const Image& img, uint k)
 
   fmt::print(stderr, "  n = {}\n", colors.size());
 
-  auto cluster_centroids = k_means(colors_vec, k, 10);
+  auto cluster_centroids = k_means(colors_vec, k, 100);
   for (const auto& point : cluster_centroids) {
     auto color = Pixel{
       (uint8_t)point.x,

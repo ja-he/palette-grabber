@@ -18,6 +18,21 @@ distance(const auto& a, const auto& b)
                     ((a.z - b.z) * (a.z - b.z))));
 }
 
+float
+mean_centroid_shift(const std::vector<Point3D>& centroids_prev,
+                    const std::vector<std::pair<Point3D, std::vector<Point3D>>>&
+                      centroids_with_cluster)
+{
+  float shift = 0.0f;
+
+  for (size_t i = 0; i < centroids_prev.size(); i++) {
+    const auto& [centroid, _] = centroids_with_cluster[i];
+    shift += (distance(centroid, centroids_prev[i]) / centroids_prev.size());
+  }
+
+  return shift;
+}
+
 std::vector<Point3D>
 k_means(const std::vector<Point3D>& input, uint k, uint epochs)
 {
@@ -32,9 +47,9 @@ k_means(const std::vector<Point3D>& input, uint k, uint epochs)
     centroids_with_points.push_back({ p, {} });
   });
 
-  for (uint epoch_counter = 0; epoch_counter < epochs; epoch_counter++) {
+  std::vector<Point3D> prev_centroids(k, { 0.0f, 0.0f, 0.0f });
 
-    fmt::print(stderr, "epoch {}...\n", epoch_counter);
+  for (uint epoch_counter = 0; epoch_counter < epochs; epoch_counter++) {
 
     // cluster points
     for (const auto& point : points) {
@@ -70,7 +85,20 @@ k_means(const std::vector<Point3D>& input, uint k, uint epochs)
         });
 
       centroid = new_centroid;
-      cluster = {};
+      cluster  = {};
+    }
+
+    // stop if centroids hardly changed
+    if (mean_centroid_shift(prev_centroids, centroids_with_points) < 0.01f) {
+      fmt::print(stderr,
+                 "  breaking at epoch {} due to negligible shift.\n",
+                 epoch_counter);
+      break;
+    }
+
+    // set previous centroids
+    for (size_t i = 0; i < centroids_with_points.size(); i++) {
+      prev_centroids[i] = centroids_with_points[i].first;
     }
   }
 
