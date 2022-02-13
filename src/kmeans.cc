@@ -6,6 +6,7 @@
 #include <numeric>
 #include <random>
 
+#define FMT_HEADER_ONLY
 #include <fmt/core.h>
 
 constexpr float MAX_3D_DIST = 441.7f; // ~= sqrt(3(255^2))

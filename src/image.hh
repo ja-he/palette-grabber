@@ -20,6 +20,9 @@ struct Pixel
 };
 
 bool
+operator==(const Pixel& a, const Pixel& b);
+
+bool
 operator<(const Pixel& a, const Pixel& b);
 
 typedef std::vector<Pixel> Line;
@@ -64,7 +67,8 @@ public:
   int get_height(void) const;
   int get_n_channels(void) const;
 
-  std::set<Pixel> get_colors(void) const;
+  std::set<Pixel>    get_colors_set(void) const;
+  std::vector<Pixel> get_colors_vec(void) const;
 
   Iterator begin();
   Iterator end();

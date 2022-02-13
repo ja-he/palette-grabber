@@ -16,14 +16,16 @@ void
 run_k_means(const Image& img, uint k)
 {
   fmt::print(
-    stderr, "generating palette via k-means clustering with k={}\n", k);
+    stderr, "generating palette via k-means clustering\n  k = {}\n", k);
 
-  auto                 colors = img.get_colors();
+  auto                 colors = img.get_colors_vec();
   std::vector<Point3D> colors_vec;
   std::transform(colors.begin(),
                  colors.end(),
                  std::back_inserter(colors_vec),
                  [](auto& p) { return p.to_p3d(); });
+
+  fmt::print(stderr, "  n = {}\n", colors.size());
 
   auto cluster_centroids = k_means(colors_vec, k, 10);
   for (const auto& point : cluster_centroids) {
@@ -68,7 +70,7 @@ main(int argc, char* argv[])
       std::cout << "  " << color.to_hex() << std::endl;
     }
   } else if (opt.dump_colors) {
-    for (auto& color : img.get_colors()) {
+    for (auto& color : img.get_colors_set()) {
       std::cout << (uint32_t)color.r << ' ' << (uint32_t)color.g << ' '
                 << (uint32_t)color.b << ' ' << color.to_uint() << '\n';
     }

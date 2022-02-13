@@ -140,7 +140,7 @@ Iterator::operator==(const Iterator& that) const
 }
 
 std::set<Pixel>
-Image::get_colors(void) const
+Image::get_colors_set(void) const
 {
   std::set<Pixel> colors;
   for (auto& line : img) {
@@ -151,10 +151,31 @@ Image::get_colors(void) const
   return colors;
 }
 
+std::vector<Pixel>
+Image::get_colors_vec(void) const
+{
+  std::vector<Pixel> colors;
+  for (auto& line : img) {
+    for (auto& color : line) {
+      colors.push_back(color);
+    }
+  }
+  std::sort(colors.begin(), colors.end());
+  colors.erase(std::unique(colors.begin(), colors.end()), colors.end());
+
+  return colors;
+}
+
 bool
 operator<(const Pixel& a, const Pixel& b)
 {
   uint32_t an = (a.r << 16) | (a.g << 8) | (a.b);
   uint32_t bn = (b.r << 16) | (b.g << 8) | (b.b);
   return an < bn;
+}
+
+bool
+operator==(const Pixel& a, const Pixel& b)
+{
+  return (a.r == b.r && a.g == b.g && a.b == b.b);
 }
