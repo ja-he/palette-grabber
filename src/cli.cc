@@ -122,7 +122,7 @@ public:
     { "help", "Print this help information." },
     { "input", "The input file. Must be given a valid input file name." },
     { "dump-colors", "Dump all colors from the image." },
-    { "k-means", "Get color clusters with K-Means." },
+    { "k-means", "Get color clusters with k-Means." },
     { "naive",
       "Naively get unique (by euclidean distance) color values from image to "
       "form palette. Can be given a distance threshold value, default is 100.0 "
@@ -132,7 +132,7 @@ public:
   std::map<std::string, std::string> option_arguments{ { "help", "" },
                                                        { "input", "<file>" },
                                                        { "dump-colors", "" },
-                                                       { "k-means", "<k>" },
+                                                       { "k-means", "[<k>]" },
                                                        { "naive",
                                                          "[<threshold>]" } };
 
