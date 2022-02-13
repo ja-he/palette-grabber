@@ -27,35 +27,6 @@ operator<(const Pixel& a, const Pixel& b);
 
 typedef std::vector<Pixel> Line;
 
-struct Iterator
-{
-  using value_type = const Pixel;
-  using reference  = const Pixel&;
-  using pointer    = const Pixel*;
-
-  reference operator*();
-  Iterator& operator++();
-  bool      operator==(const Iterator& that) const;
-
-  Iterator(std::vector<Pixel>::iterator pixel_iter,
-           std::vector<Line>::iterator  line_iter,
-           std::vector<Line>::iterator  line_end)
-    : line_iter_usable(true)
-    , pixel_iter(pixel_iter)
-    , line_iter(line_iter)
-    , line_end(line_end){};
-  Iterator(std::vector<Line>::iterator line_iter,
-           std::vector<Line>::iterator line_end)
-    : line_iter(line_iter)
-    , line_end(line_end){};
-
-private:
-  bool                              line_iter_usable = false;
-  std::vector<Pixel>::iterator      pixel_iter;
-  std::vector<Line>::iterator       line_iter;
-  const std::vector<Line>::iterator line_end;
-};
-
 class Image
 {
 public:
@@ -70,14 +41,14 @@ public:
   std::set<Pixel>    get_colors_set(void) const;
   std::vector<Pixel> get_colors_vec(void) const;
 
-  Iterator begin();
-  Iterator end();
+  std::vector<Pixel>::const_iterator begin() const;
+  std::vector<Pixel>::const_iterator end() const;
 
 private:
-  int               width;
-  int               height;
-  int               n_channels;
-  std::vector<Line> img;
+  int                width;
+  int                height;
+  int                n_channels;
+  std::vector<Pixel> img;
 };
 
 float
