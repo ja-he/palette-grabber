@@ -6,6 +6,8 @@
 #include <numeric>
 #include <random>
 
+#include <fmt/core.h>
+
 constexpr float MAX_3D_DIST = 441.7f; // ~= sqrt(3(255^2))
 
 float
@@ -30,6 +32,8 @@ k_means(const std::vector<Point3D>& input, uint k, uint epochs)
   });
 
   for (uint epoch_counter = 0; epoch_counter < epochs; epoch_counter++) {
+
+    fmt::print(stderr, "epoch {}...\n", epoch_counter);
 
     // cluster points
     for (const auto& point : points) {

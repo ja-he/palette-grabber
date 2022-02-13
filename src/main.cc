@@ -5,9 +5,36 @@
 #include <algorithm>
 #include <numeric>
 
+#define FMT_HEADER_ONLY
+#include <fmt/core.h>
+
 #include "cli.hh"
 #include "image.hh"
 #include "kmeans.hh"
+
+void
+run_k_means(const Image& img, uint k)
+{
+  fmt::print(
+    stderr, "generating palette via k-means clustering with k={}\n", k);
+
+  auto                 colors = img.get_colors();
+  std::vector<Point3D> colors_vec;
+  std::transform(colors.begin(),
+                 colors.end(),
+                 std::back_inserter(colors_vec),
+                 [](auto& p) { return p.to_p3d(); });
+
+  auto cluster_centroids = k_means(colors_vec, k, 10);
+  for (const auto& point : cluster_centroids) {
+    auto color = Pixel{
+      (uint8_t)point.x,
+      (uint8_t)point.y,
+      (uint8_t)point.z,
+    };
+    std::cout << "  " << color.to_hex() << std::endl;
+  }
+}
 
 int
 main(int argc, char* argv[])
@@ -47,22 +74,7 @@ main(int argc, char* argv[])
     }
     std::cout << std::flush;
   } else if (opt.kmeans) {
-    auto               colors = img.get_colors();
-    std::vector<Point3D> colors_vec;
-    std::transform(colors.begin(),
-                   colors.end(),
-                   std::back_inserter(colors_vec),
-                   [](auto& p) { return p.to_p3d(); });
-
-    auto cluster_centroids = k_means(colors_vec, opt.kmeans, 10);
-    for (const auto& point : cluster_centroids) {
-      auto color = Pixel{
-        (uint8_t)point.x,
-        (uint8_t)point.y,
-        (uint8_t)point.z,
-      };
-      std::cout << "  " << color.to_hex() << std::endl;
-    }
+    run_k_means(img, opt.kmeans);
   }
 
   return EXIT_SUCCESS;
