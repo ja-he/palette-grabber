@@ -1,5 +1,6 @@
 #pragma once
 
+#include "p3d.hh"
 #include <filesystem>
 #include <iostream>
 
@@ -9,11 +10,13 @@
 
 struct Pixel
 {
-  uint8_t     r = 0;
-  uint8_t     g = 0;
-  uint8_t     b = 0;
+  uint8_t r = 0;
+  uint8_t g = 0;
+  uint8_t b = 0;
+
   std::string to_hex(void) const;
   uint32_t    to_uint(void) const;
+  Point3D     to_p3d(void) const;
 };
 
 bool

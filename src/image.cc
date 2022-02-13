@@ -59,6 +59,16 @@ Image::get_n_channels(void) const
   return this->n_channels;
 }
 
+Point3D
+Pixel::to_p3d(void) const
+{
+  return {
+    (float)this->r,
+    (float)this->g,
+    (float)this->b,
+  };
+}
+
 uint32_t
 Pixel::to_uint(void) const
 {

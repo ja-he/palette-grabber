@@ -1,7 +1,7 @@
 #pragma once
 
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 
 #include <map>
 #include <string>
@@ -18,9 +18,9 @@ public:
 
   std::string input_file;
 
-  bool naive = false;
+  bool  naive           = false;
   float naive_threshold = 100.0f;
+  int   kmeans          = 5;
 
   bool dump_colors = false;
-
 };

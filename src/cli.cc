@@ -102,23 +102,27 @@ public:
   std::map<std::string, std::string> short_to_long{ { "h", "help" },
                                                     { "i", "input" },
                                                     { "d", "dump-colors" },
+                                                    { "k", "k-means" },
                                                     { "n", "naive" } };
   std::map<std::string, std::string> long_to_short{ { "help", "h" },
                                                     { "input", "i" },
                                                     { "dump-colors", "d" },
+                                                    { "k-means", "k" },
                                                     { "naive", "n" } };
 
   std::map<std::string, std::vector<std::string>> incompatible_counterparts{
     { "help", {} },
     { "input", {} },
-    { "dump-colors", { "naive" } },
-    { "naive", { "dump-colors" } },
+    { "dump-colors", { "naive", "k-means" } },
+    { "naive", { "dump-colors", "k-means" } },
+    { "k-means", { "dump-colors", "naive" } },
   };
 
   std::map<std::string, std::string> description{
     { "help", "Print this help information." },
     { "input", "The input file. Must be given a valid input file name." },
     { "dump-colors", "Dump all colors from the image." },
+    { "k-means", "Get color clusters with K-Means." },
     { "naive",
       "Naively get unique (by euclidean distance) color values from image to "
       "form palette. Can be given a distance threshold value, default is 100.0 "
@@ -128,6 +132,7 @@ public:
   std::map<std::string, std::string> option_arguments{ { "help", "" },
                                                        { "input", "<file>" },
                                                        { "dump-colors", "" },
+                                                       { "k-means", "<k>" },
                                                        { "naive",
                                                          "[<threshold>]" } };
 
@@ -199,6 +204,13 @@ Options::Options(std::map<std::string, std::string> m)
   if (m.contains("dump-colors")) {
     this->dump_colors = true;
     assert(m["dump-colors"] == "");
+  }
+  if (m.contains("k-means")) {
+    if (m["k-means"] == "") {
+      this->kmeans = 5;
+    } else {
+      this->kmeans = std::stoul(m["k-means"]);
+    }
   }
   if (m.contains("input")) {
     assert(m["input"] != "");
