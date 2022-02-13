@@ -75,6 +75,9 @@ main(int argc, char* argv[])
     std::cout << std::flush;
   } else if (opt.kmeans) {
     run_k_means(img, opt.kmeans);
+  } else {
+    uint default_k = 10;
+    run_k_means(img, default_k);
   }
 
   return EXIT_SUCCESS;
