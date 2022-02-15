@@ -6,6 +6,8 @@
 #include <numeric>
 #include <random>
 
+#include <range/v3/all.hpp>
+
 #define FMT_HEADER_ONLY
 #include <fmt/core.h>
 
@@ -19,18 +21,26 @@ distance(const auto& a, const auto& b)
 }
 
 float
-mean_centroid_shift(const std::vector<Point3D>& centroids_prev,
+total_centroid_shift(const std::vector<Point3D>& centroids_prev,
                     const std::vector<std::pair<Point3D, std::vector<Point3D>>>&
                       centroids_with_cluster)
 {
-  float shift = 0.0f;
+  // clang-format off
+  auto old_and_new_centroid_pairs =
+    ranges::views::zip(centroids_prev,
+                       centroids_with_cluster
+                       | ranges::views::transform([](auto& pair) {
+                           return pair.first;
+                         }))
+    | ranges::to<std::vector<std::pair<Point3D, Point3D>>>;
+  // clang-format on
 
-  for (size_t i = 0; i < centroids_prev.size(); i++) {
-    const auto& [centroid, _] = centroids_with_cluster[i];
-    shift += (distance(centroid, centroids_prev[i]) / centroids_prev.size());
-  }
-
-  return shift;
+  return ranges::accumulate(
+    old_and_new_centroid_pairs,
+    0.0f,
+    [](float accumulator, const auto& centroid_pair) {
+      return accumulator + distance(centroid_pair.first, centroid_pair.second);
+    });
 }
 
 std::vector<Point3D>
@@ -89,7 +99,7 @@ k_means(const std::vector<Point3D>& input, uint k, uint epochs)
     }
 
     // stop if centroids hardly changed
-    if (mean_centroid_shift(prev_centroids, centroids_with_points) < 0.01f) {
+    if (total_centroid_shift(prev_centroids, centroids_with_points) < 0.01f) {
       fmt::print(stderr,
                  "  breaking at epoch {} due to negligible shift.\n",
                  epoch_counter);
