@@ -1,7 +1,9 @@
 PROGNAME := palette-grabber
 
 STD := -std=c++20
-OPT := -O3
+DEBUG_OPTIONS := -Og -g -fsanitize=address -fsanitize=leak
+RELEASE_OPTIONS := -O3
+OPTIONS := $(RELEASE_OPTIONS)
 WRN := -Wall -Wextra -Wpedantic
 LDFLAGS :=
 
@@ -11,10 +13,10 @@ OBJECTS := $(patsubst src/%.cc, .build/%.o, $(SOURCES))
 all: .build $(PROGNAME)
 
 $(PROGNAME): $(OBJECTS)
-	g++ $(LDFLAGS) $(STD) $(OPT) $(WRN) $^ -o $@
+	g++ $(LDFLAGS) $(STD) $(OPTIONS) $(WRN) $^ -o $@
 
 .build/%.o: src/%.cc
-	g++ $(STD) $(OPT) $(WRN) $^ -c -o $@
+	g++ $(STD) $(OPTIONS) $(WRN) $^ -c -o $@
 
 .build:
 	mkdir .build
