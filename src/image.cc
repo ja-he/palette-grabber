@@ -111,10 +111,8 @@ Image::get_colors_set(void) const
 std::vector<Pixel>
 Image::get_colors_vec(void) const
 {
-  std::vector<Pixel> colors;
-  for (auto& color : img) {
-    colors.push_back(color);
-  }
+  std::vector<Pixel> colors{ img };
+
   std::sort(colors.begin(), colors.end());
   colors.erase(std::unique(colors.begin(), colors.end()), colors.end());
 
