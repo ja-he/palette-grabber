@@ -8,6 +8,8 @@
 #include <sstream>
 #include <string>
 
+#include <boost/sort/spreadsort/spreadsort.hpp>
+
 #include <cmath>
 
 Image::Image(std::filesystem::path img_path)
@@ -115,7 +117,8 @@ Image::get_colors_vec(void) const
 {
   std::vector<Pixel> colors{ img };
 
-  std::sort(colors.begin(), colors.end());
+  boost::sort::spreadsort::integer_sort(colors.begin(), colors.end());
+
   colors.erase(std::unique(colors.begin(), colors.end()), colors.end());
 
   return colors;
