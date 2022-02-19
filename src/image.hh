@@ -17,6 +17,8 @@ struct Pixel
   std::string to_hex(void) const;
   uint32_t    to_uint(void) const;
   Point3D     to_p3d(void) const;
+
+  operator uint32_t() const;
 };
 
 bool

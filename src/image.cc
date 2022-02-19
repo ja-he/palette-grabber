@@ -108,6 +108,8 @@ Image::get_colors_set(void) const
   return colors;
 }
 
+Pixel::operator uint32_t() const { return this->to_uint(); }
+
 std::vector<Pixel>
 Image::get_colors_vec(void) const
 {
