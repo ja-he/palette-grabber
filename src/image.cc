@@ -117,6 +117,14 @@ Image::get_colors_vec(void) const
 {
   std::vector<Pixel> colors{ img };
 
+  // TODO(ja-he):
+  //  - there is a possible performance gain here from eliding repetitive casts
+  //  - the sort function only works because the type conversion to uint32_t is
+  //    defined
+  //  - if we type pun here (requires Pixel to be 4 bytes wide) we see decent
+  //    performance gains (on small, unrepresentative sample data)
+  //  => a custom implementation of radix sort for Pixel _should_ deliver
+  //     performance gains.
   boost::sort::spreadsort::integer_sort(colors.begin(), colors.end());
 
   colors.erase(std::unique(colors.begin(), colors.end()), colors.end());
