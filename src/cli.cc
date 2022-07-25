@@ -101,40 +101,26 @@ public:
 
   std::map<std::string, std::string> short_to_long{ { "h", "help" },
                                                     { "i", "input" },
-                                                    { "d", "dump-colors" },
-                                                    { "k", "k-means" },
-                                                    { "n", "naive" } };
+                                                    { "k", "k-means" } };
   std::map<std::string, std::string> long_to_short{ { "help", "h" },
                                                     { "input", "i" },
-                                                    { "dump-colors", "d" },
-                                                    { "k-means", "k" },
-                                                    { "naive", "n" } };
+                                                    { "k-means", "k" } };
 
   std::map<std::string, std::vector<std::string>> incompatible_counterparts{
     { "help", {} },
     { "input", {} },
-    { "dump-colors", { "naive", "k-means" } },
-    { "naive", { "dump-colors", "k-means" } },
-    { "k-means", { "dump-colors", "naive" } },
+    { "k-means", {} },
   };
 
   std::map<std::string, std::string> description{
     { "help", "Print this help information." },
     { "input", "The input file. Must be given a valid input file name." },
-    { "dump-colors", "Dump all colors from the image." },
-    { "k-means", "Get color clusters with k-Means." },
-    { "naive",
-      "Naively get unique (by euclidean distance) color values from image to "
-      "form palette. Can be given a distance threshold value, default is 100.0 "
-      "if none provided." }
+    { "k-means", "Specify 'k' for k-Means clustering. (Default: 10)" },
   };
 
   std::map<std::string, std::string> option_arguments{ { "help", "" },
                                                        { "input", "<file>" },
-                                                       { "dump-colors", "" },
-                                                       { "k-means", "[<k>]" },
-                                                       { "naive",
-                                                         "[<threshold>]" } };
+                                                       { "k-means", "[<k>]" } };
 
   std::set<std::string> required{ "input" };
 };
@@ -186,25 +172,6 @@ Options::Options(std::map<std::string, std::string> m)
   }
 
   // parse all options
-  if (m.contains("naive")) {
-    this->naive = true;
-    if (m["naive"] == "") {
-      this->naive_threshold = 100.0f;
-    } else {
-      try {
-        this->naive_threshold = std::stof(m["naive"]);
-      } catch (const std::exception& e) {
-        std::cerr << "error: value '" << m["naive"]
-                  << "' provided for 'naive' could not be parsed: " << e.what()
-                  << std::endl;
-        this->parser_error = true;
-      };
-    }
-  }
-  if (m.contains("dump-colors")) {
-    this->dump_colors = true;
-    assert(m["dump-colors"] == "");
-  }
   if (m.contains("k-means")) {
     if (m["k-means"] == "") {
       this->kmeans = 5;

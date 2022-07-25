@@ -18,9 +18,5 @@ public:
 
   std::string input_file;
 
-  bool  naive           = false;
-  float naive_threshold = 100.0f;
-  int   kmeans          = 5;
-
-  bool dump_colors = false;
+  int kmeans = 5;
 };

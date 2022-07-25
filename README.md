@@ -1,28 +1,35 @@
 # palette-grabber
 
-A small tool to generate a color palette from an image file.
+A small tool to generate a color palette from an image file using k-Means
+clustering.
 
-## Current State
+## Build
 
-Besides outdated experimentations it implements a k-Means clustering (in
-RGB-space) by which a palette can be extracted.
+Clone and initialize submodules (this can be one command, but you might have
+cloned already so I just demonstrate the 2-step initialization):
+
+    $ git clone https://github.com/ja-he/palette-grabber.git
+    ...
+    $ git submodule update --init
+    ...
+
+Then all you need to do is build using `make`:
+
+    $ make -j4
 
 ## Usage
 
-(You can get the help text via the `-h` / `--help` flag.)
+You can get the help text via the `-h` / `--help` flag, stating:
 
-The normal usage is
 ```
-palette-grabber --input <file> -k <k>
-```
-with all options being
-```
+palette-grabber: 
+  Generate a color palette from an image file.
+
+Usage: 
+$ palette-grabber --input <file> [optional options]
+
 Options:
--d,--dump-colors         : Dump all colors from the image. 
--h,--help                : Print this help information. 
--i,--input <file>        : The input file. Must be given a valid input file name. 
--k,--k-means [<k>]       : Get color clusters with k-Means. 
--n,--naive [<threshold>] : Naively get unique (by euclidean distance) color values from 
-                           image to form palette. Can be given a distance threshold value, 
-                           default is 100.0 if none provided.
+-h,--help          : Print this help information. 
+-i,--input <file>  : The input file. Must be given a valid input file name. 
+-k,--k-means [<k>] : Specify 'k' for k-Means clustering. (Default: 10)
 ```
